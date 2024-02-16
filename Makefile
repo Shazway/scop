@@ -39,7 +39,7 @@ EOC			=	\033[0;0m
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "$(RED)=====>Compiling Vulkan Test<===== $(WHITE)"
+	@echo "$(RED)=====>Compiling Scop Test<===== $(WHITE)"
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) -o $(NAME) $(LDFLAGS)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 
@@ -53,7 +53,7 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 debug: $(DEBUG_NAME)
 
 $(DEBUG_NAME): $(DEBUG_OBJ)
-	@echo "$(RED)=====>Compiling Vulkan DEBUG<===== $(WHITE)"
+	@echo "$(RED)=====>Compiling Scop DEBUG<===== $(WHITE)"
 	$(CC) $(DEBUG_CFLAGS) $(INCLUDES) $(DEBUG_OBJ) -o $(DEBUG_NAME) $(LDFLAGS)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 22:42:42 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/15 20:41:20 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/02/17 00:15:02 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ namespace scop {
 	void App::run() {
 		while (!_window.shouldClose()) {
 			glfwPollEvents();
+			drawFrame();
 		}
-		drawFrame();
+
+		vkDeviceWaitIdle(_device.device());
 	}
 
 	App::App() {

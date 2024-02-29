@@ -17,7 +17,8 @@ SRC_NAME	=	main.cpp				\
 				window.cpp				\
 				pipeline.cpp			\
 				device.cpp				\
-				swap_chain.cpp
+				swap_chain.cpp			\
+				model.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

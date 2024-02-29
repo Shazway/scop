@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 11:50:34 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/04 02:33:02 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/02/18 21:53:36 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,21 +117,18 @@ namespace scop {
 
 		if (deviceCount == 0)
 			throw std::runtime_error("failed to find GPUs with Vulkan support!");
-
-		std::cout << "Device count: " << deviceCount << std::endl;
-		std::vector<VkPhysicalDevice> devices(deviceCount);
+		std::vector<VkPhysicalDevice>	devices(deviceCount);
 		vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
-
-		for (const auto &Device : devices) {
-			if (isDeviceSuitable(Device)) {
-				physicalDevice = Device;
-				break;
+		for (const auto& device : devices)
+		{
+			if (isDeviceSuitable(device))
+			{
+				physicalDevice = device;
+				break ;
 			}
 		}
-
-		if (physicalDevice == VK_NULL_HANDLE) {
-		throw std::runtime_error("failed to find a suitable GPU!");
-		}
+		if (physicalDevice == VK_NULL_HANDLE)
+			throw std::runtime_error("failed to find a suitable GPU!");
 
 		vkGetPhysicalDeviceProperties(physicalDevice, &properties);
 		std::cout << "physical Device: " << properties.deviceName << std::endl;
@@ -200,21 +197,28 @@ namespace scop {
 	void Device::createSurface() { window.createWindowSurface(instance, &surface_); }
 
 	bool Device::isDeviceSuitable(VkPhysicalDevice Device) {
-		QueueFamilyIndices indices = findQueueFamilies(Device);
+		VkPhysicalDeviceProperties deviceProperties;
+		VkPhysicalDeviceFeatures deviceFeatures;
 
-		bool extensionsSupported = checkDeviceExtensionSupport(Device);
-
-		bool swapChainAdequate = false;
-		if (extensionsSupported) {
-		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Device);
-		swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+		vkGetPhysicalDeviceProperties(Device, &deviceProperties);
+		vkGetPhysicalDeviceFeatures(Device, &deviceFeatures);
+		
+		if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
+				deviceFeatures.geometryShader)
+		{
+			QueueFamilyIndices indices = findQueueFamilies(Device);
+			bool extensionsSupported = checkDeviceExtensionSupport(Device);
+			bool swapChainAdequate = false;
+			std::cout << extensionsSupported << std::endl;
+			if (extensionsSupported) {
+				SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Device);
+				swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+			}
+			std::cout << C_WHITE << "Selected physical device: " << C_END << std::endl;
+			std::cout << C_WHITE << deviceProperties.deviceName << C_END << std::endl;
+			return indices.isComplete() && extensionsSupported && swapChainAdequate;
 		}
-
-		VkPhysicalDeviceFeatures supportedFeatures;
-		vkGetPhysicalDeviceFeatures(Device, &supportedFeatures);
-
-		return indices.isComplete() && extensionsSupported && swapChainAdequate &&
-		supportedFeatures.samplerAnisotropy;
+		return false;
 	}
 
 	void Device::populateDebugMessengerCreateInfo(

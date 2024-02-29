@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 11:35:42 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/04 02:36:05 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/02/21 22:20:22 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace scop {
 
 			// Not copyable or movable
 			Device(const Device &) = delete;
-			void operator=(const Device &) = delete;
+			Device& operator=(const Device &) = delete;
 			Device(Device &&) = delete;
 			Device &operator=(Device &&) = delete;
 

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 23:03:56 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/23 22:00:30 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:15:42 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #define APP_HPP
 
 #include "window.hpp"
-#include "pipeline.hpp"
 #include "device.hpp"
-#include "swap_chain.hpp"
+#include "renderer.hpp"
 #include "model.hpp"
+#include "scop_object.hpp"
 #include <memory>
 #include <vector>
 
@@ -30,11 +30,8 @@ namespace scop {
 		private:
 			Window	_window{WIDTH, HEIGHT, "Scop"};
 			Device	_device{_window};
-			std::unique_ptr<SwapChain>	swap_chain;
-			std::unique_ptr<Pipeline>	_pipeline;
-			std::unique_ptr<Model>	_model;
-			VkPipelineLayout pipelineLayout;
-			std::vector<VkCommandBuffer> commandBuffers;
+			Renderer _renderer{_window, _device};
+			std::vector<ScopObject>	scopObjects;
 		public:
 			App();
 			~App();
@@ -42,14 +39,7 @@ namespace scop {
 			App &operator=(App const) = delete;
 			void run();
 		private:
-			void loadModels();
-			void createPipelineLayout();
-			void createPipeline();
-			void createCommandBuffers();
-			void freeCommandBuffers();
-			void drawFrame();
-			void recreateSwapChain();
-			void recordCommandBuffer(int imageIndex);
+			void loadScopObjects();
 	};
 
 } // namespace scop

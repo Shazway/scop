@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 23:07:33 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/22 21:57:23 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:25:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ namespace scop {
 
 			VkResult acquireNextImage(uint32_t *imageIndex);
 			VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
+			bool compareSwapFormats(SwapChain const& swapChain) const {
+				return	swapChain.swapChainDepthFormat == swapChainDepthFormat &&
+						swapChainImageFormat == swapChainImageFormat;
+			}
 
 		private:
 			void init();
@@ -69,6 +73,7 @@ namespace scop {
 			VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
 
 			VkFormat swapChainImageFormat;
+			VkFormat swapChainDepthFormat;
 			VkExtent2D swapChainExtent;
 
 			std::vector<VkFramebuffer> swapChainFramebuffers;

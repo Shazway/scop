@@ -12,13 +12,15 @@ DEBUG_OBJ_PATH		=	debug_obj/
 CC			=	g++
 SRC_PATH	=	srcs/
 INCLUDES	=	-Iincludes
-SRC_NAME	=	main.cpp				\
-				app.cpp					\
-				window.cpp				\
-				pipeline.cpp			\
-				device.cpp				\
-				swap_chain.cpp			\
-				model.cpp
+SRC_NAME	=	main.cpp					\
+				app.cpp						\
+				window.cpp					\
+				pipeline.cpp				\
+				device.cpp					\
+				swap_chain.cpp				\
+				model.cpp					\
+				renderer.cpp				\
+				simple_render_system.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

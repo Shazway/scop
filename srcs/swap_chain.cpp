@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 21:58:36 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/22 22:05:51 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:21:55 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,7 @@ namespace scop {
 
 	void SwapChain::createDepthResources() {
 		VkFormat depthFormat = findDepthFormat();
+		swapChainDepthFormat = depthFormat;
 		VkExtent2D swapChainExtent = getSwapChainExtent();
 
 		depthImages.resize(imageCount());

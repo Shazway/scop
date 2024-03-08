@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:57:52 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/04 14:34:07 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:14:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,23 @@
 
 #include "model.hpp"
 #include <memory>
-
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace scop {
-	struct Transform2dComponent {
-		glm::vec2 translation{};
-		glm::vec2 scale{1.f, 1.f};
-		float rotation;
+	struct TransformComponent {
+		glm::vec3 translation{};
+		glm::vec3 scale{1.f, 1.f, 1.f};
+		glm::vec3 rotation;
 
-		glm::mat2 mat2() {
-			const float sin = glm::sin(rotation);
-			const float cos = glm::cos(rotation);
-			glm::mat2 rotMatrix{{cos, sin}, {-sin, cos}};
-			
-			glm::mat2 scaleMat{{scale.x, 0.0f}, {0.0f, scale.y}};
-			return rotMatrix * scaleMat;
+		glm::mat4 mat4() {
+			auto transform = glm::translate(glm::mat4{1.0f}, translation);
+			// Matrix corresponds to translate * Ry * Rx * Rz * scale transformation
+			// Rotation convention uses tait-bryan angles with axis order Y(1), X(2), Z(3)
+			transform = glm::rotate(transform, rotation.y, {0.0f, 1.0f, 0.0f});
+			transform = glm::rotate(transform, rotation.x, {1.0f, 0.0f, 0.0f});
+			transform = glm::rotate(transform, rotation.z, {0.0f, 0.0f, 1.0f});
+			transform = glm::scale(transform, scale);
+			return transform;
 		}
 	};
 
@@ -38,7 +40,7 @@ namespace scop {
 
 			std::shared_ptr<Model> model{};
 			glm::vec3 color{};
-			Transform2dComponent transform2D{};
+			TransformComponent transform{};
 		private:
 			ScopObject(id_t objId): id{objId} {};
 			id_t id;

@@ -42,6 +42,9 @@ EOC			=	\033[0;0m
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	@echo "$(PURPLE)=====>Compiling Shaders<===== $(WHITE)"
+	./compile_shaders.sh
+	@echo "$(GREEN)Done ! ✅ $(EOC)"
 	@echo "$(RED)=====>Compiling Scop Test<===== $(WHITE)"
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) -o $(NAME) $(LDFLAGS)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
@@ -56,6 +59,8 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 debug: $(DEBUG_NAME)
 
 $(DEBUG_NAME): $(DEBUG_OBJ)
+	@echo "$(PURPLE)=====>Compiling Shaders<===== $(WHITE)"
+	./compile_shaders.sh
 	@echo "$(RED)=====>Compiling Scop DEBUG<===== $(WHITE)"
 	$(CC) $(DEBUG_CFLAGS) $(INCLUDES) $(DEBUG_OBJ) -o $(DEBUG_NAME) $(LDFLAGS)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
@@ -76,6 +81,8 @@ fclean: clean
 	@echo "$(CYAN)♻  Cleaning executable ♻ $(WHITE)"
 	rm -rf $(NAME)
 	rm -rf $(DEBUG_NAME)
+	rm -rf vert.spv
+	rm -rf frag.spv
 	@echo "$(GREEN)Done !✅ $(EOC)"
 
 re: fclean all

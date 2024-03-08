@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 00:33:56 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/20 23:01:59 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:15:10 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace scop {
 	class Model {
 		public:
 			struct Vertex {
-				glm::vec2 position;
+				glm::vec3 position;
 				glm::vec3 color;
 
 				static std::vector<VkVertexInputBindingDescription> getBindingDescription();

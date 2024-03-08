@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:12:17 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/04 15:15:14 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:36:25 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 namespace scop {
 
 	struct SimplePushConstantData {
-		glm::mat2 transform{1.f};
-		glm::vec2 offset;
+		glm::mat4 transform{1.f};
 		alignas(16) glm::vec3 color;
 	};
 
@@ -62,8 +61,8 @@ namespace scop {
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		_pipeline = std::make_unique<Pipeline>(
 			_device,
-			"shaders/vert.spv",
-			"shaders/frag.spv",
+			"vert.spv",
+			"frag.spv",
 			pipelineConfig);
 	}
 
@@ -72,11 +71,13 @@ namespace scop {
 		_pipeline->bind(commandBuffer);
 
 		for (auto& object: scopObjects) {
-			object.transform2D.rotation = glm::mod(object.transform2D.rotation + 0.01f, glm::two_pi<float>());
+			object.transform.rotation.y = glm::mod(object.transform.rotation.y + 0.01f, glm::two_pi<float>());
+			object.transform.rotation.x = glm::mod(object.transform.rotation.x + 0.005f, glm::two_pi<float>());
+			
 			SimplePushConstantData push {};
-			push.offset = object.transform2D.translation;
+
 			push.color = object.color;
-			push.transform = object.transform2D.mat2();
+			push.transform = object.transform.mat4();
 
 			vkCmdPushConstants(commandBuffer,
 								pipelineLayout,

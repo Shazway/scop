@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 00:33:56 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/09 00:15:10 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 23:43:00 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,52 @@
 #include <vector>
 #include "colors.hpp"
 #include <cstring>
+#include <memory>
+
 
 namespace scop {
 	class Model {
 		public:
 			struct Vertex {
-				glm::vec3 position;
-				glm::vec3 color;
+				glm::vec3 position{};
+				glm::vec3 color{};
+				glm::vec3 normal{};
+				glm::vec2 uv{};
 
+				bool operator==(Vertex const& other) const {
+					return position == other.position && color == other.color && normal == other.normal && uv == other.uv;
+				}
 				static std::vector<VkVertexInputBindingDescription> getBindingDescription();
 				static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 			};
+
+			struct Builder {
+				std::vector<Vertex> vertices {};
+				std::vector<uint32_t> indices {}; 
+				void loadModel(std::string const& filePath);
+			};
+
 		private:
 			Device &device;
 			VkBuffer vertexBuffer;
 			VkDeviceMemory vertexBufferMemory;
 			uint32_t vertexCount;
+
+			bool hasIndexBuffer = false;
+			VkBuffer indexBuffer;
+			VkDeviceMemory indexBufferMemory;
+			uint32_t indexCount;
 		public:
-			Model(Device &newDevice, std::vector<Vertex> const& vertices);
+			Model(Device &newDevice, Model::Builder const& builder);
 			~Model();
 			Model(Model const& window) = delete;
 			Model &operator=(Model const) = delete;
 	
+			static std::unique_ptr<Model> createModelFromFile(Device &device, std::string const& filePath);
 			void bind(VkCommandBuffer commandBuffer);
 			void draw(VkCommandBuffer commandBuffer);
 		private:
 			void createVertexBuffers(std::vector<Vertex> const& vertices);
+			void createIndexBuffers(std::vector<uint32_t> const& indices);
 	};
 }

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 22:42:42 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/02/21 22:22:55 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 22:14:49 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ namespace scop {
 			VkExtent2D getExtent() { return {static_cast<uint32_t>(_width), static_cast<uint32_t>(_height)}; }
 			bool wasWindowResized() { return framebufferResized; }
 			void resetWindowResizedFlag() { framebufferResized = false; }
+			GLFWwindow *getGLFWwindow() const { return _window; }
 		private:
 			static void framebufferResizedCallback(GLFWwindow *window, int width, int height);
 			void initWindow();

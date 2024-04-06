@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:12:17 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/09 00:36:25 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 22:55:22 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,20 @@ namespace scop {
 	}
 
 
-	void SimpleRenderSystem::renderScopObjects(VkCommandBuffer commandBuffer, std::vector<ScopObject>& scopObjects) {
+	void SimpleRenderSystem::renderScopObjects(VkCommandBuffer commandBuffer, std::vector<ScopObject> &scopObjects, Camera const& camera) {
 		_pipeline->bind(commandBuffer);
 
+		auto projectionView = camera.getProjection() * camera.getView();
+
 		for (auto& object: scopObjects) {
-			object.transform.rotation.y = glm::mod(object.transform.rotation.y + 0.01f, glm::two_pi<float>());
-			object.transform.rotation.x = glm::mod(object.transform.rotation.x + 0.005f, glm::two_pi<float>());
+			// Add spin to the objects
+			// object.transform.rotation.y = glm::mod(object.transform.rotation.y + 0.01f, glm::two_pi<float>());
+			// object.transform.rotation.x = glm::mod(object.transform.rotation.x + 0.005f, glm::two_pi<float>());
 			
 			SimplePushConstantData push {};
 
 			push.color = object.color;
-			push.transform = object.transform.mat4();
+			push.transform = projectionView * object.transform.mat4();
 
 			vkCmdPushConstants(commandBuffer,
 								pipelineLayout,

@@ -20,7 +20,9 @@ SRC_NAME	=	main.cpp					\
 				swap_chain.cpp				\
 				model.cpp					\
 				renderer.cpp				\
-				simple_render_system.cpp
+				simple_render_system.cpp	\
+				camera.cpp					\
+				keyboard_inputs.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

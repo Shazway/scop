@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 23:03:56 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/04 15:15:42 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:57:51 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <memory>
 #include <vector>
 
-#define WIDTH 1080
+#define WIDTH 760
 #define HEIGHT 760
 
 namespace scop {

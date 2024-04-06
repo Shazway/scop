@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:38:46 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/04 15:27:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/03/09 15:58:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ namespace scop {
 			void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
 			void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
 			VkRenderPass getSwapChainRenderPass() const {return swap_chain->getRenderPass();};
+			float getAspectRatio() const { return swap_chain->extentAspectRatio(); };
 			bool isFrameInProgress() const { return isFrameStarted; };
 			VkCommandBuffer getCurrentCommandBuffer() const {
 				assert(isFrameStarted && "Cannot get command buffer when frame not in progress");

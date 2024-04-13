@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 00:40:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/09 23:49:37 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:03:31 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,13 @@ namespace scop {
 		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attributeDescriptions[1].offset = offsetof(Vertex, color);
 		return attributeDescriptions;
+	}
+
+	void Model::Builder::loadModel(std::string const& filePath) {
+		LoadedObj	loaded_obj = LoadedObj::parse_obj_file(filePath);
+
+		for (const auto& groups : loaded_obj.object->obj->groups) {
+		}
 	}
 
 	void Model::Builder::loadModel(std::string const& filePath) {

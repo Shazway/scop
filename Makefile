@@ -22,7 +22,8 @@ SRC_NAME	=	main.cpp					\
 				renderer.cpp				\
 				simple_render_system.cpp	\
 				camera.cpp					\
-				keyboard_inputs.cpp
+				keyboard_inputs.cpp			\
+				geometry_parser.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 14:09:19 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/04/08 20:40:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:02:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace scop {
 
 	std::unique_ptr<File> load(std::ifstream &obj) {
 		auto		ret		= std::make_unique<File>();
-		auto		cur_obj = std::make_shared<Obj>(ret->obj);
+		auto		cur_obj = std::make_shared<Obj>();
 
 		std::string line;
 		auto		grp_it = cur_obj->groups.end();
@@ -154,25 +154,5 @@ namespace scop {
 		}
 
 		return ret;
-	}
-
-	void parse_obj_file(std::string const& path) {
-		Context		  ctx(path);
-		std::ifstream obj(ctx.obj_filename);
-
-		if (!obj)
-			std::cerr << "error: " << ctx.obj_filename << ": couldn't open obj file for reading" << std::endl;
-
-		auto obj_ctx = load(obj);
-		auto mtls	 = load_materials(ctx.obj_filename, obj_ctx->mtllibs);
-
-		for (auto const& groups : obj_ctx->obj->groups) {
-			Model::Vertex vertex {};
-			uint32_t indice {}; 
-
-			for (auto const& faces : groups.faces) {
-				
-			}
-		}
 	}
 };

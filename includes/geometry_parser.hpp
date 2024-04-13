@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 21:59:01 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/04/08 20:32:01 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:03:24 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ namespace scop {
 
 		fs::path obj_filename;
 	};
+
 
 	struct Obj {
 		Obj() = default;
@@ -75,6 +76,28 @@ namespace scop {
 		glm::vec3 Ka;
 		glm::vec3 Kd;
 		glm::vec3 Ks;
+	};
+
+	struct LoadedObj {
+		bool loadedState = false;
+		std::unordered_map<std::string, Material> materials;
+		std::unique_ptr<File> object;
+
+		static LoadedObj parse_obj_file(std::string const& path) {
+			Context		  ctx(path);
+			std::ifstream obj(ctx.obj_filename);
+			LoadedObj	loaded_obj;
+
+			if (!obj)
+			{
+				std::cerr << "error: " << ctx.obj_filename << ": couldn't open obj file for reading" << std::endl;
+				return loaded_obj;
+			}
+			loaded_obj.object = load(obj);
+			loaded_obj.materials = load_materials(ctx.obj_filename, loaded_obj.object->mtllibs);
+			loaded_obj.loadedState = true;
+			return loaded_obj;
+		}
 	};
 
 	std::istream &operator>>(std::istream &ifs, glm::vec3 &target) {

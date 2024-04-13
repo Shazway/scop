@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 00:33:56 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/03/09 23:43:00 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:48:59 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "colors.hpp"
+#include "geometry_parser.hpp"
 #include <cstring>
 #include <memory>
 

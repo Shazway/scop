@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 00:40:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/04/12 00:03:31 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/04/18 00:25:33 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,56 @@ namespace scop {
 		return attributeDescriptions;
 	}
 
-	void Model::Builder::loadModel(std::string const& filePath) {
-		LoadedObj	loaded_obj = LoadedObj::parse_obj_file(filePath);
+    void Model::Builder::processFace(const std::string& faceVertex) {
+        std::istringstream viss(faceVertex);
+        std::string vertexIndex;
+        std::getline(viss, vertexIndex, '/');
 
-		for (const auto& groups : loaded_obj.object->obj->groups) {
+        int idx = std::stoi(vertexIndex) - 1;
+        indices.push_back(idx);
+    }
+
+	void Model::Builder::loadModel(std::string const& filePath) {
+		std::ifstream file(filePath);
+		if (!file.is_open()) {
+			std::cerr << "Error opening file: " << filePath << std::endl;
+			return;
 		}
+
+		std::string line;
+		while (std::getline(file, line)) {
+			std::istringstream iss(line);
+			std::string token;
+			iss >> token;
+			if (token == "v") {
+				Vertex vertex;
+				iss >> vertex.position.x >> vertex.position.y >> vertex.position.z;
+				vertex.color = {1.f, 1.f, 1.f};
+				vertices.push_back(vertex);
+			} else if (token == "vn") {
+				glm::vec3 normal;
+				iss >> normal.x >> normal.y >> normal.z;
+				vertices.back().normal = normal;
+			} else if (token == "vt") {
+				glm::vec2 uv;
+				iss >> uv.x >> uv.y;
+				vertices.back().uv = uv;
+			} else if (token == "f") {
+				std::string vertex1, vertex2, vertex3;
+				iss >> vertex1 >> vertex2 >> vertex3;
+			}
+            else if (token == "f") {
+                std::string vertex1, vertex2, vertex3;
+                iss >> vertex1 >> vertex2 >> vertex3;
+                processFace(vertex1);
+                processFace(vertex2);
+                processFace(vertex3);
+            }
+        }
+        file.close();
 	}
 
-	void Model::Builder::loadModel(std::string const& filePath) {
+	/*void Model::Builder::loadModel(std::string const& filePath) {
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
@@ -218,5 +260,5 @@ namespace scop {
 				indices.push_back(uniqueVertices[vertex]);
 			}
 		}
-	}
+	}*/
 };

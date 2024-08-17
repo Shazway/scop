@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:19:31 by tmoragli          #+#    #+#             */
-/*   Updated: 2024/07/27 20:25:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:47:50 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,117 @@ namespace scop {
 
 							continue;
 						}
-						
+
+						// normal
+						if (token[0] == 'v' && token[1] == 'n' && IS_SPACE((token[2])))
+						{
+							token += 3;
+							float x, y, z;
+							parseFloat3(&x, &y, &z, &token);
+							vn.push_back(x);
+							vn.push_back(y);
+							vn.push_back(z);
+							continue;
+						}
+
+						// texcoord
+						if (token[0] == 'v' && token[1] == 't' && IS_SPACE((token[2])))
+						{
+							token += 3;
+							float x, y;
+							parseFloat2(&x, &y, &token);
+							vt.push_back(x);
+							vt.push_back(y);
+							continue;
+						}
+
+						// line
+						if (token[0] == 'l' && IS_SPACE((token[1])))
+						{
+							token += 2;
+							__line_t line;
+
+							while (!IS_NEW_LINE(token[0]))
+							{
+								vertex_index_t vi;
+								if (!parseTriple(&token,
+												static_cast<int>(v.size() / 3),
+												static_cast<int>(vn.size() / 3),
+												static_cast<int>(vt.size() / 2), &vi))
+									return false;
+								line.vertex_indices.push_back(vi);
+
+								size_t n = strspn(token, " \t\r");
+								token += n;
+							}
+
+							prim_group.lineGroup.push_back(line);
+
+							continue;
+						}
+
+						// points
+						if (token[0] == 'p' && IS_SPACE((token[1])))
+						{
+							token += 2;
+
+							__points_t pts;
+
+							while (!IS_NEW_LINE(token[0])) {
+								vertex_index_t vi;
+								if (!parseTriple(&token, static_cast<int>(v.size() / 3),
+												static_cast<int>(vn.size() / 3),
+												static_cast<int>(vt.size() / 2), &vi))
+									return false;
+
+								pts.vertex_indices.push_back(vi);
+
+								size_t n = strspn(token, " \t\r");
+								token += n;
+							}
+
+							prim_group.pointsGroup.push_back(pts);
+
+							continue;
+						}
+
+						// face
+						if (token[0] == 'f' && IS_SPACE((token[1]))) {
+							token += 2;
+							token += strspn(token, " \t");
+
+							face_t face;
+
+							face.smoothing_group_id = current_smoothing_id;
+							face.vertex_indices.reserve(3);
+
+							while (!IS_NEW_LINE(token[0]))
+							{
+								vertex_index_t vi;
+								if (!parseTriple(&token, static_cast<int>(v.size() / 3),
+												static_cast<int>(vn.size() / 3),
+												static_cast<int>(vt.size() / 2), &vi))
+									return false;
+
+								greatest_v_idx = greatest_v_idx > vi.v_idx ? greatest_v_idx : vi.v_idx;
+								greatest_vn_idx = greatest_vn_idx > vi.vn_idx ? greatest_vn_idx : vi.vn_idx;
+								greatest_vt_idx = greatest_vt_idx > vi.vt_idx ? greatest_vt_idx : vi.vt_idx;
+
+								face.vertex_indices.push_back(vi);
+								size_t n = strspn(token, " \t\r");
+								token += n;
+							}
+
+							// replace with emplace_back + std::move on C++11
+							prim_group.faceGroup.push_back(face);
+							continue;
+						}
+
+						//usemtl
+						//TODO
+
+						//mtllib
+						//TODO
 					}
 				}
 			}
